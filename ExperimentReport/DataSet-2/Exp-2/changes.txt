@@ -1,0 +1,6 @@
+CHanges to htmconfig.json
+
+Change 1: 
+"LocalAreaDensity": 0.1,	
+to 
+"LocalAreaDensity": 0.2,
