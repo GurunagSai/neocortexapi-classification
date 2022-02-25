@@ -1,1 +1,4 @@
 No changes made in the htmcongig.json file and code
+
+The micro corelation of the data set is almost at 90% for all the image sets
+but the macro corelation between the shapes is also at the same level of micro corelation which is not an expected output
