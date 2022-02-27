@@ -1,0 +1,10 @@
+CHanges to htmconfig.json
+
+Change 1: 
+"PotentialRadius": 30,
+"LocalAreaDensity": 0.1	
+to 
+"PotentialRadius": 10,
+"LocalAreaDensity": 0.2 
+
+Result: Both micro and macro corelation(almost hitting the max to 90%) increased which is not a likely aspect of the experiment
