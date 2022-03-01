@@ -1,0 +1,21 @@
+Change in dataset - Removing the star object images to reduce load on machine
+
+CHanges to htmconfig.json
+
+Change 1: 
+"PotentialRadius": 30,
+"LocalAreaDensity": 0.1,
+"ColumnDimensions": [
+    32,
+    32
+  ],
+to 
+"PotentialRadius": 3,
+"LocalAreaDensity": 0.15,
+"ColumnDimensions": [
+    64,
+    64
+  ],
+
+Result: the micro corelation of the shapes are high and also less than the macro 
+corelation between the images

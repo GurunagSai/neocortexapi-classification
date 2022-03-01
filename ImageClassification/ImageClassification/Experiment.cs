@@ -134,17 +134,17 @@ namespace ConsoleApp
             var hg = doubleArray.GetLength(1);
             var wd = doubleArray.GetLength(0);
             var intArray = new int[hg*wd];
-            //var TempArray = new int[hg , wd];
+            var TempArray = new int[hg , wd];
             for (int j = 0; j < hg; j++)
             {
                 for (int i = 0;i< wd;i++)
                 {
                     intArray[j*wd+i] = (int)doubleArray[i,j,0];
-                    //TempArray[j,i] = (int)doubleArray[i, j, 0];
+                    TempArray[j,i] = (int)doubleArray[i, j, 0];
                 }
             }
 
-            /*for (int j = 0; j < hg; j++)
+            for (int j = 0; j < hg; j++)
             {
                 for (int i = 0; i < wd; i++)
                 {
@@ -153,7 +153,8 @@ namespace ConsoleApp
 
                 }
                 Console.Write("\n");
-            }*/
+            }
+            Console.Write("\n");
 
             return intArray;
         }
