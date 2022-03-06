@@ -71,7 +71,7 @@ namespace ConsoleApp
             //helperFunc.printSimilarityMatrix(listCorrelation, "micro", classes);
             //helperFunc.printSimilarityMatrix(listCorrelation, "macro", classes);
             helperFunc.printSimilarityMatrix(listCorrelation, "both", classes);
-            Console.WriteLine(listInputCorrelation["Applepic1__Applepic2"]);
+            Console.WriteLine(listInputCorrelation["Circlecircle1__Circlecircle2"]);
 
 
             // Prediction Code
@@ -247,7 +247,7 @@ namespace ConsoleApp
             cortexLayer.HtmModules.Add("sp", sp);
 
             // Learning process will take 1000 iterations (cycles)
-            int maxSPLearningCycles = 1;
+            int maxSPLearningCycles = 1000;
 
             // Save the result SDR into a list of array
             Dictionary<string, int[]> outputValues = new Dictionary<string, int[]>();
