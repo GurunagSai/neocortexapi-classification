@@ -71,7 +71,7 @@ namespace ConsoleApp
             //helperFunc.printSimilarityMatrix(listCorrelation, "micro", classes);
             //helperFunc.printSimilarityMatrix(listCorrelation, "macro", classes);
             helperFunc.printSimilarityMatrix(listCorrelation, "both", classes);
-            Console.WriteLine(listInputCorrelation["Circlecircle1__Circlecircle2"]);
+            //Console.WriteLine(listInputCorrelation["Circlecircle1__Circlecircle1"]);
 
 
             // Prediction Code
@@ -136,8 +136,11 @@ namespace ConsoleApp
                 for (int i = 0; i < width; i++)
                 {
                     vs[i] += inputVector[j * width + i].ToString()+',';
+                    Console.Write(inputVector[j * width + i]);
                 }
+                Console.Write("\n");
             }
+            Console.Write("\n");
             return vs;
         }
 
@@ -166,27 +169,13 @@ namespace ConsoleApp
             var hg = doubleArray.GetLength(1);
             var wd = doubleArray.GetLength(0);
             var intArray = new int[hg*wd];
-            var TempArray = new int[hg , wd];
             for (int j = 0; j < hg; j++)
             {
                 for (int i = 0;i< wd;i++)
                 {
                     intArray[j*wd+i] = (int)doubleArray[i,j,0];
-                    TempArray[j,i] = (int)doubleArray[i, j, 0];
                 }
             }
-
-            for (int j = 0; j < hg; j++)
-            {
-                for (int i = 0; i < wd; i++)
-                {
-
-                    Console.Write(TempArray[j, i]);
-
-                }
-                Console.Write("\n");
-            }
-            Console.Write("\n");
 
             return intArray;
         }
