@@ -284,10 +284,12 @@ namespace ConsoleApp
             //loop of trained image classes
             foreach (KeyValuePair<string, List<string>> entry in objectPath)
             {
-
+                //Extracting the trained object class and file paths from the objectpath dictionary
                 var classLabel = entry.Key;
                 var filePathList = entry.Value;
                 var numberOfImages = filePathList.Count;
+                
+                //Creating a variable to calculate the average similarity for the particular object class
                 double avgSimilarity = 0;
 
                 //loop for comparing the given input image sdr to trained image sdr
@@ -305,7 +307,7 @@ namespace ConsoleApp
                     avgSimilarity += inputSimilarity;
                 }
 
-                //calculating the average using avgSimilarity for an object class
+                //calculating the average using avgSimilarity for the object class and storing it in dictionary
                 avgSimilarity = avgSimilarity / numberOfImages;
                 avgSimilarityList.Add(classLabel, avgSimilarity);
             }
