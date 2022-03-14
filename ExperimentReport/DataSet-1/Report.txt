@@ -1,8 +1,0 @@
-This file is the report of the dataset consisiting of images of Circle, Rectangle and Trinagle and below are the observation points for the image classification output. 
-
-1. Dataset1-exp1 is the result for the image classification for the above dataset without changing any htmconfig parameters
-2. Dataset1-exp2 is the result for above dataset where htmconfig - Globalinhibition set "true". (macro correlation is high between images)
-3. Dataset1-exp3 is the result for above dataset where maxboost = 1 (micro correlation is low and macro correlation between circle and square is high )
-4. Dataset1-exp4 is the result for above dataset where maxboost = 20 (macro correlation of the images were high so it is not a valid update)
-5. Dataset1-exp5 is the result for above dataset where PotentialRadius = 35(increased) (macro correlation of the images were high for circle and rectangle and microcorrelation for rectangle is low)
-6. Dataset1-exp6 is the result for above dataset where PotentialRadius = 20(decreased) (macro correlation of the images were high for circle and rectangle and microcorrelation for rectangle is low)
