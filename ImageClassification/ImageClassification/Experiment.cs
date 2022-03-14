@@ -12,27 +12,27 @@ namespace ConsoleApp
     {
         HtmConfig htmConfig;
         ArgsConfig expConfig;
-        public Experiment( ArgsConfig config)
+        public Experiment(ArgsConfig config)
         {
             expConfig = config;
             htmConfig = config.htmConfig;
         }
 
         public void run()
-        { 
+        {
             int height = htmConfig.InputDimensions[0];
             int width = htmConfig.InputDimensions[1];
 
             // By default it only returns subdirectories one level deep. 
             var directories = Directory.GetDirectories(expConfig.inputFolder).ToList();
 
-            (   Dictionary<string, int[]> binaries, // List of Binarized images
+            (Dictionary<string, int[]> binaries, // List of Binarized images
                 Dictionary<string, List<string>> inputsPath // Path of the list of images found in the given folder
-            )   = imageBinarization(directories, width, height);
+            ) = imageBinarization(directories, width, height);
 
             // The key of the dictionary helps to keep track of which class the SDR belongs to
-            
-            (Dictionary<string, int[]> sdrs,var cortexLayer) = SPTrain(htmConfig, binaries);
+
+            (Dictionary<string, int[]> sdrs, var cortexLayer) = SPTrain(htmConfig, binaries);
             //(Dictionary<string, int[]> sdrs2, var cortexLayer2) = SPTrain(htmConfig, binaries, colorThreshold );
 
             HelpersTemp helperFunc = new HelpersTemp();
@@ -48,20 +48,21 @@ namespace ConsoleApp
                 for (int i = 0; i < numberOfImages; i++) // loop of the images inside the folder
                 {
                     if (!sdrs.TryGetValue(filePathList[i], out int[] sdr1)) continue;
-                    
-                    foreach (KeyValuePair<string, List<string>> secondEntry in inputsPath) { // loop of the folder (again)
+
+                    foreach (KeyValuePair<string, List<string>> secondEntry in inputsPath)
+                    { // loop of the folder (again)
                         var classLabel2 = secondEntry.Key;
                         var filePathList2 = secondEntry.Value;
                         var numberOfImages2 = filePathList2.Count;
                         for (int j = 0; j < numberOfImages2; j++) // loop of the images inside the folder
-                            {
-                                if (!sdrs.TryGetValue(filePathList2[j], out int[] sdr2)) continue;
-                                string fileNameofFirstImage = Path.GetFileNameWithoutExtension(filePathList[i]);
-                                string fileNameOfSecondImage = Path.GetFileNameWithoutExtension(filePathList2[j]);
-                                string temp = $"{classLabel + fileNameofFirstImage}__{classLabel2 + fileNameOfSecondImage}";
+                        {
+                            if (!sdrs.TryGetValue(filePathList2[j], out int[] sdr2)) continue;
+                            string fileNameofFirstImage = Path.GetFileNameWithoutExtension(filePathList[i]);
+                            string fileNameOfSecondImage = Path.GetFileNameWithoutExtension(filePathList2[j]);
+                            string temp = $"{classLabel + fileNameofFirstImage}__{classLabel2 + fileNameOfSecondImage}";
 
-                                listCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(sdr1, sdr2));
-                                listInputCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(binaries[filePathList[i]].IndexWhere((el) => el == 1), binaries[filePathList2[j]].IndexWhere((el) => el == 1)));
+                            listCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(sdr1, sdr2));
+                            listInputCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(binaries[filePathList[i]].IndexWhere((el) => el == 1), binaries[filePathList2[j]].IndexWhere((el) => el == 1)));
                         }
                     }
                 }
@@ -86,8 +87,8 @@ namespace ConsoleApp
             foreach (var predictfilePath in predictInputImages)
             {
                 // Fetching the predict input image file name
-                var predictImageNameWithoutExt = Path.GetFileNameWithoutExtension(predictfilePath);               
-                
+                var predictImageNameWithoutExt = Path.GetFileNameWithoutExtension(predictfilePath);
+
                 // input image encoding and learn the input pattern
                 int[] encodedInputImage = ReadImageData(predictfilePath, width, height);
                 cortexLayer.Compute(encodedInputImage, false);
@@ -170,7 +171,7 @@ namespace ConsoleApp
             {
                 for (int i = 0; i < width; i++)
                 {
-                    vs[i] += inputVector[j * width + i].ToString()+',';
+                    vs[i] += inputVector[j * width + i].ToString() + ',';
                 }
             }
             return vs;
@@ -200,12 +201,12 @@ namespace ConsoleApp
             var doubleArray = bizer.GetArrayBinary();
             var hg = doubleArray.GetLength(1);
             var wd = doubleArray.GetLength(0);
-            var intArray = new int[hg*wd];
+            var intArray = new int[hg * wd];
             for (int j = 0; j < hg; j++)
             {
-                for (int i = 0;i< wd;i++)
+                for (int i = 0; i < wd; i++)
                 {
-                    intArray[j*wd+i] = (int)doubleArray[i,j,0];
+                    intArray[j * wd + i] = (int)doubleArray[i, j, 0];
                 }
             }
 
@@ -216,7 +217,7 @@ namespace ConsoleApp
         /// </summary>
         /// <param name="cfg"></param> Spatial Pooler configuration by HtmConfig style
         /// <param name="inputValues"></param> Binary input vector (pattern) list
-        private static (Dictionary<string, int[]>,CortexLayer<object, object> cortexLayer) SPTrain(HtmConfig cfg, Dictionary<string, int[]> inputValues)
+        private static (Dictionary<string, int[]>, CortexLayer<object, object> cortexLayer) SPTrain(HtmConfig cfg, Dictionary<string, int[]> inputValues)
         {
             // Creates the htm memory.
             var mem = new Connections(cfg);
@@ -301,7 +302,7 @@ namespace ConsoleApp
                 if (isInStableState)
                     break;
             }
-            return (outputValues,cortexLayer);
+            return (outputValues, cortexLayer);
         }
         //--------------------------Prediction Method--------------------------//
         /// <summary>
@@ -323,7 +324,7 @@ namespace ConsoleApp
                 var classLabel = entry.Key;
                 var filePathList = entry.Value;
                 var numberOfImages = filePathList.Count;
-                
+
                 // Creating a variable to calculate the average similarity for the particular object class
                 double avgSimilarity = 0;
 
