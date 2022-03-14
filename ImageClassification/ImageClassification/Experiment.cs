@@ -72,7 +72,12 @@ namespace ConsoleApp
             //helperFunc.printSimilarityMatrix(listCorrelation, "micro", classes);
             //helperFunc.printSimilarityMatrix(listCorrelation, "macro", classes);
             helperFunc.printSimilarityMatrix(listCorrelation, "both", classes);
-            //Console.WriteLine(listInputCorrelation["Circlecircle1__Circlecircle1"]);
+            Console.WriteLine("Circlecircle0__Circlecircle1: "+listInputCorrelation["Circlecircle0__Circlecircle1"]);
+            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle1: "+listInputCorrelation["Rectanglerectangle0__Rectanglerectangle1"]);
+            Console.WriteLine("Triangletriangle0__Triangletriangle1: "+listInputCorrelation["Triangletriangle0__Triangletriangle1"]);
+            Console.WriteLine("Circlecircle0__Circlecircle1 sdr: "+listCorrelation["Circlecircle0__Circlecircle1"]);
+            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle1 sdr: "+listCorrelation["Rectanglerectangle0__Rectanglerectangle1"]);
+            Console.WriteLine("Triangletriangle0__Triangletriangle1 sdr: "+listCorrelation["Triangletriangle0__Triangletriangle1"]);
 
             //--------------------------PredictionCode--------------------------//
             // By Team CrustyCrab
