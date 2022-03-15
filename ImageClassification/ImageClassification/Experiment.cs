@@ -64,6 +64,7 @@ namespace ConsoleApp
                             listCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(sdr1, sdr2));
                             listInputCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(binaries[filePathList[i]].IndexWhere((el) => el == 1), binaries[filePathList2[j]].IndexWhere((el) => el == 1)));
                         }
+                        Console.WriteLine("sdr len: " + sdr1.Length);
                     }
                 }
             }
