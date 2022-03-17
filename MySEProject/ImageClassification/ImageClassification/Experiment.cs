@@ -73,63 +73,23 @@ namespace ConsoleApp
             //helperFunc.printSimilarityMatrix(listCorrelation, "micro", classes);
             //helperFunc.printSimilarityMatrix(listCorrelation, "macro", classes);
             helperFunc.printSimilarityMatrix(listCorrelation, "both", classes);
-            Console.WriteLine("Circlecircle0__Circlecircle1: "+listInputCorrelation["Circlecircle0__Circlecircle1"]);
-            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle1: "+listInputCorrelation["Rectanglerectangle0__Rectanglerectangle1"]);
-            Console.WriteLine("Triangletriangle0__Triangletriangle1: "+listInputCorrelation["Triangletriangle0__Triangletriangle1"]);
-            Console.WriteLine("Circlecircle0__Circlecircle1 sdr: "+listCorrelation["Circlecircle0__Circlecircle1"]);
-            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle1 sdr: "+listCorrelation["Rectanglerectangle0__Rectanglerectangle1"]);
-            Console.WriteLine("Triangletriangle0__Triangletriangle1 sdr: "+listCorrelation["Triangletriangle0__Triangletriangle1"]);
+
+            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle2: " + listInputCorrelation["Rectanglerectangle0__Rectanglerectangle2"]);
+            Console.WriteLine("Rectanglerectangle0__Triangletriangle0: " + listInputCorrelation["Rectanglerectangle0__Triangletriangle0"]);
+            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle2 sdr: " + listCorrelation["Rectanglerectangle0__Rectanglerectangle2"]);
+            Console.WriteLine("Rectanglerectangle0__Triangletriangle0 sdr: " + listCorrelation["Rectanglerectangle0__Triangletriangle0"]);
 
             //--------------------------PredictionCode--------------------------//
-            // By Team CrustyCrab
-            // Prediction Code Method-1
+            // By Team CrustyCrab           
             // Extracting the prediction images from the project directory
             // Fetch the filepath and images from the PredictInputFolder
             var currentDirList = Directory.GetDirectories(Directory.GetCurrentDirectory()).ToList();
             var predictImageFilePath = currentDirList.Find(x => x.Contains("PredictInputFolder"));
             var predictInputImages = Directory.GetFiles(predictImageFilePath).Where(name => !name.EndsWith(".txt")).ToList();
-
-            // looping the images that needs to be predicted by the trained model
-            foreach (var predictfilePath in predictInputImages)
-            {
-                // Fetching the predict input image file name
-                var predictImageNameWithoutExt = Path.GetFileNameWithoutExtension(predictfilePath);
-
-                // input image encoding and learn the input pattern
-                int[] encodedInputImage = ReadImageData(predictfilePath, width, height);
-                cortexLayer.Compute(encodedInputImage, false);
-                var activeColumns = cortexLayer.GetResult("sp") as int[];
-                var sdrOfInputImage = activeColumns.OrderBy(c => c).ToArray();
-
-                // Comparing the trained model sdrs to the input image sdr
-                Dictionary<string, double> predictedSimilarityList = PredictLabel(inputsPath, sdrs, sdrOfInputImage);
-
-                // Displaying the prediction result
-                Console.WriteLine($"\nThe predicted results for the input image \"{predictImageNameWithoutExt}\" is");
-                predictedSimilarityList.Select(i => $"{i.Key}: {Math.Round(i.Value, 2)}%").ToList().ForEach(Console.WriteLine);
-            }
-
-            /*
-            // Prediction Code Method-2
-            // User inputs the prediction image file path
-            Console.WriteLine("\nEnter the filepath for the Prediction Image:");
-            string predictfilePath = Console.ReadLine();
-
-            // input image encoding and learn the input pattern
-            int[] encodedInputImage = ReadImageData(predictfilePath, width, height);
-            cortexLayer.Compute(encodedInputImage, false);
-            var activeColumns = cortexLayer.GetResult("sp") as int[];
-            var sdrOfInputImage = activeColumns.OrderBy(c => c).ToArray();
-
-            // Comparing the trained model sdrs to the input image sdr
-            Dictionary<string, double> predictedSimilarityList = PredictLabel(inputsPath, sdrs, sdrOfInputImage);
-
-            // Displaying the prediction result
-            Console.WriteLine($"\nThe predicted results for the input image is");
-            predictedSimilarityList.Select(i => $"{i.Key}: {Math.Round(i.Value, 2)}%").ToList().ForEach(Console.WriteLine);
-            */
-
-            //--------------------------Endo of PredictionCode--------------------------//
+            
+            //Predict the similarity between the train model object to the predictInputImages
+            PredictionSimilarity(height, width, inputsPath, sdrs, cortexLayer, predictInputImages);
+            //--------------------------End of PredictionCode--------------------------//
         }
 
         private Tuple<Dictionary<string, int[]>, Dictionary<string, List<string>>> imageBinarization(List<string> directories, int width, int height)
@@ -275,7 +235,7 @@ namespace ConsoleApp
             cortexLayer.HtmModules.Add("sp", sp);
 
             // Learning process will take 1000 iterations (cycles)
-            int maxSPLearningCycles = 1000;
+            int maxSPLearningCycles = 50;
 
             // Save the result SDR into a list of array
             Dictionary<string, int[]> outputValues = new Dictionary<string, int[]>();
@@ -312,17 +272,51 @@ namespace ConsoleApp
         }
         //--------------------------Prediction Method--------------------------//
         /// <summary>
+        /// This method loops between all the images that need to be predicted by the 
+        /// trained model and displays the similarity between the trained objects and input images
+        /// </summary>
+        /// <param name="height">input image height</param>
+        /// <param name="width">input image width</param>
+        /// <param name="inputsPath">path of the trained model images</param>
+        /// <param name="sdrs">sdrs of the rained model images</param>
+        /// <param name="cortexLayer"></param>
+        /// <param name="predictInputImages">Input images that are to be predicted by trained model</param>
+        private void PredictionSimilarity(int height, int width, Dictionary<string, List<string>> inputsPath, Dictionary<string, int[]> sdrs, CortexLayer<object, object>? cortexLayer, List<string> predictInputImages)
+        {
+            // loop for the images that needs to be predicted by the trained model
+            foreach (var predictfilePath in predictInputImages)
+            {
+                // Fetching the predict input image file name
+                var predictImageNameWithoutExt = Path.GetFileNameWithoutExtension(predictfilePath);
+
+                // input image encoding and learn the input pattern
+                int[] encodedInputImage = ReadImageData(predictfilePath, width, height);
+                cortexLayer.Compute(encodedInputImage, false);
+                var activeColumns = cortexLayer.GetResult("sp") as int[];
+                var sdrOfInputImage = activeColumns.OrderBy(c => c).ToArray();
+
+                // Comparing the trained model sdrs to the input image sdr
+                Dictionary<string, string> predictedSimilarityList = PredictLabel(inputsPath, sdrs, sdrOfInputImage);
+
+                // Displaying the prediction result
+                Console.WriteLine($"\nThe predicted results for the input image \"{predictImageNameWithoutExt}\" is");
+                predictedSimilarityList.Select(i => $"{i.Key}: {i.Value}").ToList().ForEach(Console.WriteLine);
+
+
+            }
+        }
+        /// <summary>
         /// This method compares the sdrs from the trained model to the input image sdr
         /// By Team CrustyCrab
         /// </summary>
         /// <param name="objectPath">trained model images inputpath</param>
         /// <param name="sdrs">trained image sdrs</param>
         /// <param name="sdrOfInputImage">sdr of the input images that needs to be predicted</param>
-        /// <returns>dictionary with key as object class and value as the avg corelation between input image and trained object class</returns>
-        public Dictionary<string, double> PredictLabel(Dictionary<string, List<string>> objectPath, Dictionary<string, int[]> sdrs, int[] sdrOfInputImage)
+        /// <returns>dictionary with key as object class and value as the correlation between input image and trained object class</returns>
+        public Dictionary<string, string> PredictLabel(Dictionary<string, List<string>> objectPath, Dictionary<string, int[]> sdrs, int[] sdrOfInputImage)
         {
-            // Dictionary to store the average values of the corelation values of different classes
-            Dictionary<string, double> avgSimilarityList = new();
+            // Dictionary to store the result of the corelation values of different trained model objects
+            Dictionary<string, string> objectSimilarityList = new();
             // loop of trained object images
             foreach (KeyValuePair<string, List<string>> entry in objectPath)
             {
@@ -331,8 +325,10 @@ namespace ConsoleApp
                 var filePathList = entry.Value;
                 var numberOfImages = filePathList.Count;
 
-                // Creating a variable to calculate the average similarity for the particular object class
-                double avgSimilarity = 0;
+                // list to store the similarity values between the predict input image to trained images of an object
+                List<double> similarityList = new();
+                // Result string to format all the similartity values
+                String resultString = "";
 
                 // loop for comparing the given input image sdr to trained image sdr
                 for (int i = 0; i < numberOfImages; i++)
@@ -341,17 +337,17 @@ namespace ConsoleApp
                     // calculating and storing the similarity between the given input image sdr to trained image sdr
                     double inputSimilarity = MathHelpers.CalcArraySimilarity(sdrOfInputImage, sdr);
 
-                    // adding the inputSimilarity values for the average calculation for an object class
-                    avgSimilarity += inputSimilarity;
+                    // adding the inputSimilarity values to the similarityList of an object class
+                    similarityList.Add(inputSimilarity);
                 }
 
-                // calculating the average using avgSimilarity for the object class and storing it in dictionary
-                avgSimilarity /= numberOfImages;
-                avgSimilarityList.Add(classLabel, avgSimilarity);
+                // Storing the maximum, average and minimum value from the similarityList and adding it to result dictionary
+                resultString = "\tMax:" + Math.Round(similarityList.Max(), 2) + "%\tAvg:" + Math.Round(similarityList.Average(), 2) + "%\tMin:" + Math.Round(similarityList.Min(), 2) + "%";
+                objectSimilarityList.Add(classLabel, resultString);
             }
 
-            return avgSimilarityList;
+            return objectSimilarityList;
         }
-        //--------------------------Prediction Method--------------------------//
+        //--------------------------End of Prediction Methods--------------------------//
     }
 }
