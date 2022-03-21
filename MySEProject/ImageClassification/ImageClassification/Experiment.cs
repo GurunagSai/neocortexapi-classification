@@ -79,8 +79,7 @@ namespace ConsoleApp
             Console.WriteLine("Rectanglerectangle0__Rectanglerectangle2 sdr: " + listCorrelation["Rectanglerectangle0__Rectanglerectangle2"]);
             Console.WriteLine("Rectanglerectangle0__Triangletriangle0 sdr: " + listCorrelation["Rectanglerectangle0__Triangletriangle0"]);
 
-            //--------------------------PredictionCode--------------------------//
-            // By Team CrustyCrab           
+            //--------------------------PredictionCode--------------------------//           
             // Extracting the prediction images from the project directory
             // Fetch the filepath and images from the PredictInputFolder
             var currentDirList = Directory.GetDirectories(Directory.GetCurrentDirectory()).ToList();
@@ -270,7 +269,7 @@ namespace ConsoleApp
             }
             return (outputValues, cortexLayer);
         }
-        //--------------------------Prediction Method--------------------------//
+        //--------------------------Prediction Methods--------------------------//
         /// <summary>
         /// This method loops between all the images that need to be predicted by the 
         /// trained model and displays the similarity between the trained objects and input images
@@ -338,8 +337,8 @@ namespace ConsoleApp
                     double inputSimilarity = MathHelpers.CalcArraySimilarity(sdrOfInputImage, sdr);
 
                     // adding the inputSimilarity values to the similarityList of an object class
-                    similarityList.Add(inputSimilarity);
-                }
+                    similarityList.Add(inputSimilarity); 
+                }             
 
                 // Storing the maximum, average and minimum value from the similarityList and adding it to result dictionary
                 resultString = "\tMax:" + Math.Round(similarityList.Max(), 2) + "%\tAvg:" + Math.Round(similarityList.Average(), 2) + "%\tMin:" + Math.Round(similarityList.Min(), 2) + "%";
