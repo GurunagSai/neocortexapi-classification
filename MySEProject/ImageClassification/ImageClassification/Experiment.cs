@@ -64,7 +64,6 @@ namespace ConsoleApp
                             listCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(sdr1, sdr2));
                             listInputCorrelation.Add(temp, MathHelpers.CalcArraySimilarity(binaries[filePathList[i]].IndexWhere((el) => el == 1), binaries[filePathList2[j]].IndexWhere((el) => el == 1)));
                         }
-                        Console.WriteLine("sdr len: " + sdr1.Length);
                     }
                 }
             }
@@ -73,12 +72,7 @@ namespace ConsoleApp
             //helperFunc.printSimilarityMatrix(listCorrelation, "micro", classes);
             //helperFunc.printSimilarityMatrix(listCorrelation, "macro", classes);
             helperFunc.printSimilarityMatrix(listCorrelation, "both", classes);
-
-            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle2: " + listInputCorrelation["Rectanglerectangle0__Rectanglerectangle2"]);
-            Console.WriteLine("Rectanglerectangle0__Triangletriangle0: " + listInputCorrelation["Rectanglerectangle0__Triangletriangle0"]);
-            Console.WriteLine("Rectanglerectangle0__Rectanglerectangle2 sdr: " + listCorrelation["Rectanglerectangle0__Rectanglerectangle2"]);
-            Console.WriteLine("Rectanglerectangle0__Triangletriangle0 sdr: " + listCorrelation["Rectanglerectangle0__Triangletriangle0"]);
-
+       
             //--------------------------PredictionCode--------------------------//           
             // Extracting the prediction images from the project directory
             // Fetch the filepath and images from the PredictInputFolder
@@ -234,7 +228,7 @@ namespace ConsoleApp
             cortexLayer.HtmModules.Add("sp", sp);
 
             // Learning process will take 1000 iterations (cycles)
-            int maxSPLearningCycles = 50;
+            int maxSPLearningCycles = 1000;
 
             // Save the result SDR into a list of array
             Dictionary<string, int[]> outputValues = new Dictionary<string, int[]>();
