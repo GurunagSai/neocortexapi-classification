@@ -72,14 +72,22 @@ namespace ConsoleApp
             //helperFunc.printSimilarityMatrix(listCorrelation, "micro", classes);
             //helperFunc.printSimilarityMatrix(listCorrelation, "macro", classes);
             helperFunc.printSimilarityMatrix(listCorrelation, "both", classes);
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> main
             //--------------------------PredictionCode--------------------------//           
             // Extracting the prediction images from the project directory
             // Fetch the filepath and images from the PredictInputFolder
             var currentDirList = Directory.GetDirectories(Directory.GetCurrentDirectory()).ToList();
             var predictImageFilePath = currentDirList.Find(x => x.Contains("PredictInputFolder"));
             var predictInputImages = Directory.GetFiles(predictImageFilePath).Where(name => !name.EndsWith(".txt")).ToList();
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> main
             //Predict the similarity between the train model object to the predictInputImages
             PredictionSimilarity(height, width, inputsPath, sdrs, cortexLayer, predictInputImages);
             //--------------------------End of PredictionCode--------------------------//
@@ -331,8 +339,13 @@ namespace ConsoleApp
                     double inputSimilarity = MathHelpers.CalcArraySimilarity(sdrOfInputImage, sdr);
 
                     // adding the inputSimilarity values to the similarityList of an object class
+<<<<<<< HEAD
                     similarityList.Add(inputSimilarity); 
                 }             
+=======
+                    similarityList.Add(inputSimilarity);
+                }
+>>>>>>> main
 
                 // Storing the maximum, average and minimum value from the similarityList and adding it to result dictionary
                 resultString = "\tMax:" + Math.Round(similarityList.Max(), 2) + "%\tAvg:" + Math.Round(similarityList.Average(), 2) + "%\tMin:" + Math.Round(similarityList.Min(), 2) + "%";
